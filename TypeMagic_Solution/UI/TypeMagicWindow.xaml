@@ -1,0 +1,131 @@
+﻿<Window x:Class="TypeMagic.UI.TypeMagicWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Type Magic - Редактор параметров типа"
+        Width="1200" Height="900"
+        MinWidth="1200" MinHeight="700"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        Background="#FFFFFF"
+        Topmost="True">
+
+    <Window.Resources>
+        <!-- Стиль для заголовков групп -->
+        <Style x:Key="GroupHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Foreground" Value="#333333"/>
+        </Style>
+
+        <!-- Стиль для меток параметров -->
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,0"/>
+        </Style>
+
+        <!-- Добавлен стиль для ParamName -->
+        <Style x:Key="ParamNameStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,2"/>
+            <Setter Property="Foreground" Value="#888888"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+        </Style>
+
+        <!-- Добавлен стиль для ограничений -->
+        <Style x:Key="ConstraintsStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Foreground" Value="#999999"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+        </Style>
+
+        <!-- Стиль для полей ввода -->
+        <Style x:Key="InputStyle" TargetType="Control">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Стиль для рамки изображения группы -->
+        <Style x:Key="GroupImageBorderStyle" TargetType="Border">
+            <Setter Property="Width" Value="400"/>
+            <Setter Property="Height" Value="400"/>
+            <Setter Property="Margin" Value="0,0,20,0"/>
+            <Setter Property="Background" Value="#F5F5F5"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Toolbar -->
+            <RowDefinition Height="*"/>
+            <!-- Content -->
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <Border Grid.Row="0" Background="#F5F5F5" BorderBrush="#CCCCCC" BorderThickness="0,0,0,1" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Редактор параметров типа семейства" 
+                           FontFamily="Segoe UI" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="Семейство:" FontFamily="Segoe UI" FontSize="12" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="txtFamilyName" Text="" FontFamily="Segoe UI" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                    <TextBlock Text="Тип:" FontFamily="Segoe UI" FontSize="12" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="txtFamilyType" Text="" FontFamily="Segoe UI" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+                    <TextBlock Text="Версия:" FontFamily="Segoe UI" FontSize="12" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="txtVersion" Text="" FontFamily="Segoe UI" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Content Area -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20">
+            <StackPanel x:Name="groupsContainer">
+                <!-- Группы будут добавлены динамически -->
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Buttons Panel -->
+        <Border Grid.Row="2" Background="#F5F5F5" BorderBrush="#CCCCCC" BorderThickness="0,1,0,0" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock x:Name="txtStatus" Grid.Column="0" FontFamily="Segoe UI" FontSize="12" 
+                           FontStyle="Italic" VerticalAlignment="Center" Foreground="#666666"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="btnCreateNew" Content="Создать новый тип" Width="150" Height="30" 
+                            Margin="5" Click="BtnCreateNewType_Click"/>
+                    <Button x:Name="btnApply" Content="Применить" Width="100" Height="30" 
+                            Margin="5" IsDefault="True" Click="BtnApply_Click"/>
+                    <Button x:Name="btnCancel" Content="Отмена" Width="100" Height="30" 
+                            Margin="5" IsCancel="True" Click="BtnCancel_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
