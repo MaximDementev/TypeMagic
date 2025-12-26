@@ -388,7 +388,7 @@ namespace TypeMagic.UI
                         // Параметры арматуры уже хранятся в миллиметрах
                         if (specTypeId == SpecTypeId.BarDiameter || specTypeId == SpecTypeId.ReinforcementLength)
                         {
-                            return Math.Round(value, 0);
+                            return Math.Round(UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.Millimeters), 0);
                         }
 
                         // Преобразуем в отображаемые единицы если это не безразмерное значение
@@ -448,11 +448,7 @@ namespace TypeMagic.UI
 
             return string.Join(" | ", parts);
         }
-
-        private bool IsLengthParameter(Parameter param)
-        {
-            return param.Definition.GetDataType() == SpecTypeId.Length;
-        }
+                
 
         // Получает список элементов для ElementId с учетом префикса
         private List<Element> GetElementIdOptions(string prefix)
@@ -479,17 +475,7 @@ namespace TypeMagic.UI
             try
             {
                 var values = CollectParameterValues();
-                var errors = _applyService.ValidateParameters(_formDefinition, values);
-
-                //if (errors.Any())
-                //{
-                //    var errorMessage = string.Join("\n", errors);
-                //    this.Topmost = false;
-                //    TaskDialog.Show(Messages.TitleError, string.Format(Messages.ErrorValidation, errorMessage));
-                //    this.Topmost = true;
-                //    return;
-                //}
-
+                
                 var convertedValues = CollectParameterValuesForApply();
 
                 using (var transaction = new Transaction(_document, "Применение параметров"))
@@ -527,17 +513,7 @@ namespace TypeMagic.UI
                     return;
 
                 var values = CollectParameterValues();
-                var errors = _applyService.ValidateParameters(_formDefinition, values);
-
-                if (errors.Any())
-                {
-                    var errorMessage = string.Join("\n", errors);
-                    this.Topmost = false;
-                    TaskDialog.Show(Messages.TitleError, string.Format(Messages.ErrorValidation, errorMessage));
-                    this.Topmost = true;
-                    return;
-                }
-
+                
                 var convertedValues = CollectParameterValuesForApply();
 
                 FamilySymbol newSymbol = null;
@@ -556,7 +532,6 @@ namespace TypeMagic.UI
 
                 // Обновляем выбранный тип
                 _familySymbol = newSymbol;
-                LoadParameterValues();
             }
             catch (Exception ex)
             {
@@ -744,11 +719,6 @@ namespace TypeMagic.UI
             }
             result = result.Replace(',', '.');
             return result.ToString();
-        }
-
-        private void LoadParameterValues()
-        {
-            // Implementation to load parameter values for the new family symbol
         }
     }
 }

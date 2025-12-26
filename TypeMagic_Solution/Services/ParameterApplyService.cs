@@ -70,6 +70,8 @@ namespace TypeMagic.Services
         {
             if (value == null && param.StorageType != StorageType.String)
                 return;
+            string paramName = param.Definition.Name;
+            ParameterType paramType = param.Definition.ParameterType;
 
             switch (param.StorageType)
             {
@@ -81,8 +83,14 @@ namespace TypeMagic.Services
                     break;
 
                 case StorageType.Double:
+
                     if (value is double doubleVal)
+                    {
+                        if (paramType == ParameterType.BarDiameter || paramType == ParameterType.ReinforcementLength)
+                            doubleVal = UnitUtils.ConvertToInternalUnits(doubleVal, UnitTypeId.Millimeters);
+
                         param.Set(doubleVal);
+                    }
                     break;
 
                 case StorageType.String:
