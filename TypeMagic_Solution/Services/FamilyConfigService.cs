@@ -33,19 +33,29 @@ namespace TypeMagic.Services
             return param.AsString();
         }
 
-        // Находит папку конфигурации для семейства и версии
+        // Находит папку конфигурации для семейства и версии 
         public string FindConfigFolder(string familyName, string version)
         {
-            // Здесь должна быть логика поиска корневой папки семейства
-            // Для примера используем заглушку
-            var baseFolder = @"C:\Users\Dementev\Desktop\Revit\Families\" + familyName;
-            var versionFolder = Path.Combine(baseFolder, version);
+            var root = AppConstants.FamilyTypeConfigsPath;
 
-            if (Directory.Exists(versionFolder))
-                return versionFolder;
+            if (!Directory.Exists(root))
+                return null;
+
+            var familyDirs = Directory.EnumerateDirectories(
+                root,
+                familyName,
+                SearchOption.AllDirectories);
+
+            foreach (var familyDir in familyDirs)
+            {
+                var versionDir = Path.Combine(familyDir, version);
+                if (Directory.Exists(versionDir))
+                    return versionDir;
+            }
 
             return null;
         }
+
 
         // Загружает конфигурацию для семейства
         public FormDefinition LoadFamilyConfig(FamilySymbol familySymbol)

@@ -7,6 +7,7 @@
         public const string PluginName = "TypeMagic";
         public const string PluginDisplayName = "Type Magic";
         public const string VersionParameterName = "ADSK_Версия семейства";
+        public const string FamilyTypeConfigsPath = @"B:\BIM\00_РЕСУРСЫ\AUTODESK REVIT\Семейства\Семейства KRGP\FamilyTypeConfigs\";
         #endregion
 
         #region File Extensions
