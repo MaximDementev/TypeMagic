@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -105,51 +106,70 @@ namespace TypeMagic.UI
                 Style = (Style)FindResource("GroupImageBorderStyle")
             };
 
-            if (!string.IsNullOrEmpty(group.ImagePath) && System.IO.File.Exists(group.ImagePath))
+            if (!string.IsNullOrEmpty(group.ImagePath) && File.Exists(group.ImagePath))
             {
-                var image = new System.Windows.Controls.Image
+                var bitmap = new BitmapImage(new Uri(group.ImagePath));
+
+                var image = new Image
                 {
-                    Source = new BitmapImage(new Uri(group.ImagePath)),
-                    Stretch = Stretch.Uniform
-                };
-                border.Child = image;
-            }
-            else
-            {
-                // Placeholder если изображение не найдено
-                var stackPanel = new StackPanel
-                {
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    Source = bitmap,
+                    Stretch = Stretch.Uniform,
+                    HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center
                 };
 
-                var icon = new TextBlock
-                {
-                    Text = "🖼",
-                    FontSize = 48,
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                    Margin = new Thickness(0, 0, 0, 10)
-                };
 
-                var placeholder = new TextBlock
-                {
-                    Text = group.Name,
-                    FontSize = 14,
-                    FontWeight = FontWeights.Bold,
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                    TextAlignment = TextAlignment.Center,
-                    Foreground = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#999999")),
-                    TextWrapping = TextWrapping.Wrap,
-                    MaxWidth = 350
-                };
+                border.Child = image;
 
-                stackPanel.Children.Add(icon);
-                stackPanel.Children.Add(placeholder);
-                border.Child = stackPanel;
+                border.MouseLeftButtonUp += (_, __) =>
+                {
+                    OpenImagePreview(bitmap);
+                };
+            }
+            else
+            {
+                border.Child = CreateImagePlaceholder(group.Name);
             }
 
             return border;
         }
+
+        private void OpenImagePreview(BitmapImage image)
+        {
+            var preview = new ImagePreviewWindow(image)
+            {
+                Owner = this
+            };
+            preview.ShowDialog();
+        }
+
+        private UIElement CreateImagePlaceholder(string name)
+        {
+            var stack = new StackPanel
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            stack.Children.Add(new TextBlock
+            {
+                Text = "🖼",
+                FontSize = 48,
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
+
+            stack.Children.Add(new TextBlock
+            {
+                Text = name,
+                Foreground = Brushes.Gray,
+                TextAlignment = TextAlignment.Center,
+                TextWrapping = TextWrapping.Wrap,
+                MaxWidth = 350
+            });
+
+            return stack;
+        }
+
 
         // Создает панель с параметрами группы
         private StackPanel CreateParametersPanel(GroupDefinition group)

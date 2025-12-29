@@ -57,13 +57,17 @@
         <!-- Стиль для рамки изображения группы -->
         <Style x:Key="GroupImageBorderStyle" TargetType="Border">
             <Setter Property="Width" Value="400"/>
-            <Setter Property="Height" Value="400"/>
+            <Setter Property="MaxHeight" Value="600"/>
             <Setter Property="Margin" Value="0,0,20,0"/>
             <Setter Property="Background" Value="#F5F5F5"/>
             <Setter Property="BorderBrush" Value="#DDDDDD"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
+
+
     </Window.Resources>
 
     <Grid>

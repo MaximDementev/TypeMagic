@@ -38,12 +38,12 @@
     <Reference Include="ExcelDataReader, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDataReader.3.8.0\lib\net462\ExcelDataReader.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ExcelDataReader.DataSet, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDataReader.DataSet.3.8.0\lib\net462\ExcelDataReader.DataSet.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="MagicEntry">
       <HintPath>..\..\..\..\..\..\..\ProgramData\Autodesk\Revit\Addins\2022\MagicEntry\MagicEntry.dll</HintPath>
@@ -104,7 +104,7 @@
     <Reference Include="System.Text.Encoding.CodePages, Version=10.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encoding.CodePages.10.0.1\lib\net462\System.Text.Encoding.CodePages.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -126,6 +126,7 @@
     <Compile Include="Services\ExcelConfigService.cs" />
     <Compile Include="Services\FamilyConfigService.cs" />
     <Compile Include="Services\ParameterApplyService.cs" />
+    <Compile Include="UI\ImagePreviewWindow.cs" />
     <Compile Include="UI\InputDialog.xaml.cs">
       <DependentUpon>InputDialog.xaml</DependentUpon>
     </Compile>
