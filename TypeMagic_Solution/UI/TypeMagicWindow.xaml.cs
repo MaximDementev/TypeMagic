@@ -118,7 +118,6 @@ namespace TypeMagic.UI
                     VerticalAlignment = VerticalAlignment.Center
                 };
 
-
                 border.Child = image;
 
                 border.MouseLeftButtonUp += (_, __) =>
@@ -169,7 +168,6 @@ namespace TypeMagic.UI
 
             return stack;
         }
-
 
         // Создает панель с параметрами группы
         private StackPanel CreateParametersPanel(GroupDefinition group)
@@ -335,12 +333,23 @@ namespace TypeMagic.UI
                     }
                     else
                     {
-                        var textBox = new System.Windows.Controls.TextBox
+                        if (field.UiType == FieldType.String)
                         {
-                            Text = displayValue,
-                            Style = (Style)FindResource("InputStyle")
-                        };
-                        inputControl = textBox;
+                            var expandableTextBox = new ExpandableTextBox
+                            {
+                                Text = displayValue
+                            };
+                            inputControl = expandableTextBox;
+                        }
+                        else
+                        {
+                            var textBox = new System.Windows.Controls.TextBox
+                            {
+                                Style = (Style)FindResource("InputStyle"),
+                                Text = displayValue
+                            };
+                            inputControl = textBox;
+                        }
                     }
                     break;
 
@@ -349,9 +358,20 @@ namespace TypeMagic.UI
                     {
                         Style = (Style)FindResource("InputStyle"),
                         ItemsSource = GetElementIdOptions(field.Prefix),
-                        DisplayMemberPath = "Name",
                         IsEditable = true
                     };
+
+                    // Настраиваем шаблон отображения элемента
+                    var itemTemplate = new DataTemplate();
+                    var factory = new FrameworkElementFactory(typeof(TextBlock));
+
+                    // Создаем привязку для отображения "(FamilyName) TypeName"
+                    var binding = new System.Windows.Data.Binding();
+                    binding.Converter = new ElementTypeDisplayConverter();
+                    factory.SetBinding(TextBlock.TextProperty, binding);
+
+                    itemTemplate.VisualTree = factory;
+                    elementComboBox.ItemTemplate = itemTemplate;
 
                     if (currentValue is ElementId elemId)
                     {
@@ -468,7 +488,6 @@ namespace TypeMagic.UI
 
             return string.Join(" | ", parts);
         }
-                
 
         // Получает список элементов для ElementId с учетом префикса
         private List<Element> GetElementIdOptions(string prefix)
@@ -476,16 +495,20 @@ namespace TypeMagic.UI
             var collector = new FilteredElementCollector(_document)
                 .WhereElementIsElementType();
 
-            if (!string.IsNullOrWhiteSpace(prefix))
+            if (!string.IsNullOrEmpty(prefix))
             {
-                var elements = collector.ToList()
-                    .Where(e => e.Name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                return collector
+                    .OfType<ElementType>()
+                    .Where(t =>
+                        !string.IsNullOrEmpty(t.FamilyName) &&
+                        t.FamilyName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                    .Cast<Element>()
                     .ToList();
-                return elements;
             }
 
             return collector.ToList();
         }
+
         #endregion
 
         #region Event Handlers
@@ -495,7 +518,7 @@ namespace TypeMagic.UI
             try
             {
                 var values = CollectParameterValues();
-                
+
                 var convertedValues = CollectParameterValuesForApply();
 
                 using (var transaction = new Transaction(_document, "Применение параметров"))
@@ -533,7 +556,7 @@ namespace TypeMagic.UI
                     return;
 
                 var values = CollectParameterValues();
-                
+
                 var convertedValues = CollectParameterValuesForApply();
 
                 FamilySymbol newSymbol = null;
@@ -611,6 +634,10 @@ namespace TypeMagic.UI
                         : comboBox.SelectedItem?.ToString();
                     return ParseValue(field, selectedValue, convertUnits);
                 }
+            }
+            else if (control is ExpandableTextBox expandableTextBox)
+            {
+                return ParseValue(field, expandableTextBox.Text, convertUnits);
             }
             else if (control is System.Windows.Controls.TextBox textBox)
             {

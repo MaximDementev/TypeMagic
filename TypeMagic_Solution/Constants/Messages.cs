@@ -15,6 +15,7 @@
         public const string ErrorTransaction = "Ошибка при применении изменений: {0}";
         public const string ErrorCreateType = "Ошибка при создании нового типа: {0}";
         public const string ErrorApply = "Ошибка при применении параметров: {0}";
+        public const string ErrorGenerateTypeName = "Не удалось сгенерировать имя типа из формул конфигурации.";
         #endregion
 
         #region Info Messages
@@ -22,6 +23,7 @@
         public const string InfoNewTypeCreated = "Создан новый тип: {0}";
         public const string InfoPluginInitialized = "Плагин {0} инициализирован успешно.";
         public const string InfoSelectElement = "Выберите экземпляр семейства в модели";
+        public const string InfoTypeRenamed = "Тип '{0}' переименован в '{1}'.";
         #endregion
 
         #region Validation Messages
@@ -38,6 +40,7 @@
         public const string LabelCancel = "Отмена";
         public const string LabelNewTypeName = "Имя нового типа:";
         public const string WindowTitle = "Type Magic - Редактор параметров типа";
+        public const string LabelTypeNamePrompt = "Введите имя типа:";
         #endregion
 
         #region Dialog Titles

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace TypeMagic.UI
 {
@@ -6,7 +7,11 @@ namespace TypeMagic.UI
     public partial class InputDialog : Window
     {
         #region Properties
-        public string InputText { get; private set; }
+        public string InputText
+        {
+            get => txtInput.Text;
+            set => txtInput.Text = value;
+        }
         #endregion
 
         #region Constructor
@@ -15,14 +20,23 @@ namespace TypeMagic.UI
         {
             InitializeComponent();
             txtPrompt.Text = prompt;
+
+            // Динамический расчет ширины окна и высоты TextBox
+            txtPrompt.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            double textHeight = txtPrompt.DesiredSize.Height;
+            double textWidth = txtPrompt.DesiredSize.Width;
+
+            // Увеличиваем окно, если текст большой
+            this.Width = Math.Max(this.Width, textWidth + 500);
+
         }
+
         #endregion
 
         #region Event Handlers
         // Обработчик кнопки OK
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-            InputText = txtInput.Text;
             DialogResult = true;
             Close();
         }

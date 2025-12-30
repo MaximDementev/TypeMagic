@@ -26,6 +26,7 @@
         public const string ColMin = "Min";
         public const string ColPrefix = "Prefix";
         public const string ColComment = "Comment";
+        public const string ColTypeName = "TypeName";
         #endregion
 
         #region UI Settings

@@ -70,8 +70,6 @@ namespace TypeMagic.Services
         {
             if (value == null && param.StorageType != StorageType.String)
                 return;
-            string paramName = param.Definition.Name;
-            ParameterType paramType = param.Definition.ParameterType;
 
             switch (param.StorageType)
             {
@@ -83,11 +81,18 @@ namespace TypeMagic.Services
                     break;
 
                 case StorageType.Double:
-
                     if (value is double doubleVal)
                     {
-                        if (paramType == ParameterType.BarDiameter || paramType == ParameterType.ReinforcementLength)
+                        // Определяем тип данных параметра через ForgeTypeId
+                        ForgeTypeId dataType = param.Definition.GetDataType();
+
+                        // Проверяем, является ли параметр для арматуры
+                        if (dataType == SpecTypeId.BarDiameter ||
+                            dataType == SpecTypeId.ReinforcementLength)
+                        {
+                            // Конвертируем из миллиметров в внутренние единицы (футы)
                             doubleVal = UnitUtils.ConvertToInternalUnits(doubleVal, UnitTypeId.Millimeters);
+                        }
 
                         param.Set(doubleVal);
                     }
